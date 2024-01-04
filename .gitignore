@@ -1,0 +1,8 @@
+# Virtual environment
+venv
+
+# Python files and folders
+**/__pycache__/
+
+# SQLite
+*.sqlite3
