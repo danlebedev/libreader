@@ -3,7 +3,7 @@
 </head>
 <body>
     <h1>Library</h1>
-    {% for k, v in tree_root.items %}
+    {% for k, v in node.items %}
         {% if v.folder %}
         <p>
             <a href="{{ v.route }}">{{ k }}. {{ v.header }}.xml</a>
