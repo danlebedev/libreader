@@ -2,5 +2,14 @@
     <title>reader_app</title>
 </head>
 <body>
-    <p>reader_app</p>
+    <h1>Library</h1>
+    {% for k, v in tree_root.items %}
+        {% if v.folder %}
+        <a href="{{ k }}">{{ k }}. {{ v.header }}.xml</a>
+        {% else %}
+        <a href="{{ k }}">{{ k }}. {{ v.header }}</p>
+        {% endif %}
+    {% empty %}
+    <p>empty</p>
+    {% endfor %}
 </body>
