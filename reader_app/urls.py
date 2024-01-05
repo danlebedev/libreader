@@ -5,4 +5,6 @@ app_name = 'reader_app'
 urlpatterns = [
     # Homepage.
     path('', views.index, name='index'),
+    # Other.
+    path('<path:path>', views.other, name='other'),
 ]
