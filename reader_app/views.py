@@ -1,7 +1,8 @@
-from django.shortcuts import render, HttpResponse
-from django.urls import reverse
+from django.shortcuts import render
+from bs4 import BeautifulSoup
 import os
 import json
+import base64
 
 
 LIBRARY_ROOT_JSON = os.path.join(os.path.abspath(os.curdir), 'reader_app', 'services', 'library_root.json')
@@ -37,9 +38,35 @@ def index(request):
 def other(request, path):
     node = tree_processing(path)
     if node.get("folder"):
-        with open((os.path.join(LIBRARY_ROOT["path"], node["folder"], 'document.xml'))) as f:
-            page = f.read()
-        return HttpResponse(page)
+        with open((os.path.join(LIBRARY_ROOT["path"], node["folder"], 'document.xml')), encoding='UTF-8') as f:
+            soup = BeautifulSoup(f, features='xml')
+            page = soup.find('body')
+            images = page.find_all("img")
+            codes = page.find_all("code")
+            consoles = page.find_all("console")
+            outputs = page.find_all("output")
+            if images:
+                for image in images:
+                    with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "image", image.attrs["src"]), 'rb') as f:
+                        img_data = f.read()
+                    encoded_image = base64.b64encode(img_data).decode('UTF-8')
+                    image["src"] = f"data:image/png;base64,{encoded_image}"
+            if codes:
+                for code in codes:
+                    with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "code", code.attrs["src"]), encoding="UTF-8") as f:
+                        text = f.read()
+                        code.insert(0, text)
+            if consoles:
+                pass
+            if outputs:
+                for output in outputs:
+                    with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "output", output.attrs["src"]), encoding="UTF-8") as f:
+                        text = f.read()
+                        output.insert(0, text)
+            body = page.prettify()
+            print(body)
+            context = {"body" : body}
+        return render(request, 'reader_app/display_file.html', context)
     context = {"node": node["path"]}
     return render(request, 'reader_app/other.html', context)
 
