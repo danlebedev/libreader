@@ -5,12 +5,11 @@ import json
 import base64
 
 
-os.sep = '/'
-LIBRARY_ROOT_JSON = os.path.join(os.path.abspath(os.curdir), 'reader_app', 'services', 'library_root.json')
-with open(LIBRARY_ROOT_JSON, 'r') as f:
+LIBRARY_ROOT_JSON = os.path.join(os.path.abspath(os.curdir), 'library_root.json')
+with open(LIBRARY_ROOT_JSON, 'r', encoding='UTF-8') as f:
     LIBRARY_ROOT = json.load(f)
 LIBRARY_STRUCTURE_TREE_JSON = os.path.join(LIBRARY_ROOT["path"], "_structure", "tree.json")
-with open(LIBRARY_STRUCTURE_TREE_JSON) as f:
+with open(LIBRARY_STRUCTURE_TREE_JSON, 'r', encoding='UTF-8') as f:
     TREE_JSON = json.load(f)
 
 

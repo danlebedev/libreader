@@ -6,3 +6,6 @@ venv
 
 # SQLite
 *.sqlite3
+
+# Library root
+library_root.json
