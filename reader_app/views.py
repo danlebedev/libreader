@@ -5,6 +5,7 @@ import json
 import base64
 
 
+os.sep = '/'
 LIBRARY_ROOT_JSON = os.path.join(os.path.abspath(os.curdir), 'reader_app', 'services', 'library_root.json')
 with open(LIBRARY_ROOT_JSON, 'r') as f:
     LIBRARY_ROOT = json.load(f)
@@ -57,14 +58,17 @@ def other(request, path):
                         text = f.read()
                         code.insert(0, text)
             if consoles:
-                pass
+                for console in consoles:
+                    with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "console", console.attrs["src"]), encoding="UTF-8") as f:
+                        text = f.read()
+                        console.insert(0, text)
             if outputs:
                 for output in outputs:
                     with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "output", output.attrs["src"]), encoding="UTF-8") as f:
                         text = f.read()
                         output.insert(0, text)
-            body = page.prettify()
-            print(body)
+            body = str(page)
+            print(node["folder"])
             context = {"body" : body}
         return render(request, 'reader_app/display_file.html', context)
     context = {"node": node["path"]}
