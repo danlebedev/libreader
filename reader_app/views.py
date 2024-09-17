@@ -53,19 +53,28 @@ def other(request, path):
                     image["src"] = f"data:image/png;base64,{encoded_image}"
             if codes:
                 for code in codes:
-                    with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "code", code.attrs["src"]), encoding="UTF-8") as f:
-                        text = f.read()
-                        code.insert(0, text)
+                    try:
+                        with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "code", code.attrs["src"]), encoding="UTF-8") as f:
+                            text = f.read()
+                            code.insert(0, text)
+                    except Exception as e:
+                        code.insert(0, f"{e}\n")
             if consoles:
                 for console in consoles:
-                    with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "console", console.attrs["src"]), encoding="UTF-8") as f:
-                        text = f.read()
-                        console.insert(0, text)
+                    try:
+                        with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "console", console.attrs["src"]), encoding="UTF-8") as f:
+                            text = f.read()
+                            console.insert(0, text)
+                    except Exception as e:
+                        console.insert(0, f"{e}\n")
             if outputs:
                 for output in outputs:
-                    with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "output", output.attrs["src"]), encoding="UTF-8") as f:
-                        text = f.read()
-                        output.insert(0, text)
+                    try:
+                        with open(os.path.join(LIBRARY_ROOT["path"], node["folder"], "output", output.attrs["src"]), encoding="UTF-8") as f:
+                            text = f.read()
+                            output.insert(0, text)
+                    except Exception as e:
+                        output.insert(0, f"{e}\n")
             body = str(page)
             print(node["folder"])
             context = {"body" : body}
